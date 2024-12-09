@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: lazor-mapper
+  datasource:
+    username: pgadmin
+    password: example
+    url: jdbc:postgresql://localhost:15432/postgres
+    driver-class-name: org.postgresql.Driver
