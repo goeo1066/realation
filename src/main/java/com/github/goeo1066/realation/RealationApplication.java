@@ -24,9 +24,17 @@ public class RealationApplication {
             DatabasePrompt<PersonInfo, Integer> prompt = factory.create(PersonInfo.class, jdbcTemplate);
             PersonInfo personInfo = prompt.select(1);
             System.out.println(personInfo.toString());
-            TableInfo<PersonInfo> tableInfo = TableInfo.retrieveFromEntity(PersonInfo.class);
-            PersonInfo personInfo1 = WhereCreator.WhereCreatorCondition(tableInfo);
-            System.out.println(personInfo1.getName());
+//            TableInfo<PersonInfo> tableInfo = TableInfo.retrieveFromEntity(PersonInfo.class);
+//            PersonInfo personInfo1 = WhereCreator.WhereCreatorCondition(tableInfo);
+//            System.out.println(personInfo1.getName());
+
+            prompt.selectBy((column, clause) -> {
+                clause.where()
+                        .eq(column.getName(), "goeo").and()
+                        .in(column.getAge(), 10, 20, 30)
+                ;
+
+            });
         };
     }
 }

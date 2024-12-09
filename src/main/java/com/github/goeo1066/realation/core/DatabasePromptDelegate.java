@@ -13,10 +13,10 @@ public class DatabasePromptDelegate<S> {
     private final TableInfo<S> tableInfo;
 
     public DatabasePromptDelegate(
-            Class<S> entityClass
-    ) throws NoSuchMethodException {
+            TableInfo<S> tableInfo
+    ) {
         this.selectSqlComposer = new SelectSqlComposerPostgreSQL<>();
-        this.tableInfo = TableInfo.retrieveFromEntity(entityClass);
+        this.tableInfo = tableInfo;
     }
 
     public List<S> select(NamedParameterJdbcTemplate jdbcTemplate, SelectSpec selectSpec) {

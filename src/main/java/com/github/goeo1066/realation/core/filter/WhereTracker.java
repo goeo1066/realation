@@ -13,7 +13,7 @@ public class WhereTracker {
 
     @RuntimeType
     public Object intercept(@SuperCall Callable<?> zuper, @Origin final Method method, @AllArguments Object[] args) throws Exception {
-        System.out.println("intercepted");
+        System.out.println("C: " + method.getName());
         return zuper.call();
     }
 }

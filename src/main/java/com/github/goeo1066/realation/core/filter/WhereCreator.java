@@ -11,10 +11,12 @@ import net.bytebuddy.matcher.ElementMatchers;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public interface WhereCreator {
-    <S> void create(S condition);
+public class WhereCreator {
+    public WhereClauses where() {
+        return new WhereClauses();
+    }
 
-    static <S> S WhereCreatorCondition(TableInfo<S> tableInfo) {
+    public static <S> S WhereCreatorCondition(TableInfo<S> tableInfo) {
         ByteBuddy byteBuddy = new ByteBuddy();
         Class<? extends S> abstractTrackerClass = null;
         try (var make = byteBuddy.subclass(tableInfo.getEntityClass())
