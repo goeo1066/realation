@@ -12,16 +12,26 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class WhereCreator {
-    public WhereClauses where() {
-        return new WhereClauses();
+    private final WhereClauseBuilder whereClauseBuilder;
+
+    public WhereCreator(WhereClauseBuilder whereClauseBuilder) {
+        this.whereClauseBuilder = whereClauseBuilder;
     }
 
-    public static <S> S WhereCreatorCondition(TableInfo<S> tableInfo) {
+    public WhereClauses where() {
+        return new WhereClauses(whereClauseBuilder);
+    }
+
+    public OrderByClause orderBy() {
+        return new OrderByClause(whereClauseBuilder);
+    }
+
+    public static <S> S WhereCreatorCondition(TableInfo<S> tableInfo, WhereClauseBuilder whereClauseBuilder) {
         ByteBuddy byteBuddy = new ByteBuddy();
         Class<? extends S> abstractTrackerClass = null;
         try (var make = byteBuddy.subclass(tableInfo.getEntityClass())
                 .method(elementMatherWithNames(tableInfo))
-                .intercept(MethodDelegation.to(new WhereTracker()))
+                .intercept(MethodDelegation.to(new WhereTracker(whereClauseBuilder)))
                 .make()) {
             abstractTrackerClass = make.load(tableInfo.getEntityClass().getClassLoader())
                     .getLoaded();

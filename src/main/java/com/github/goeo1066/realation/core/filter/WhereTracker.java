@@ -9,10 +9,16 @@ import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 
 public class WhereTracker {
-    private Object value;
+    private final WhereClauseBuilder whereClauseBuilder;
+
+    public WhereTracker(WhereClauseBuilder whereClauseBuilder) {
+        this.whereClauseBuilder = whereClauseBuilder;
+    }
 
     @RuntimeType
     public Object intercept(@SuperCall Callable<?> zuper, @Origin final Method method, @AllArguments Object[] args) throws Exception {
+        String columnName = whereClauseBuilder.getMethodToColumnNameMap().get(method.getName());
+        whereClauseBuilder.getColumnHolder().add(columnName);
         System.out.println("C: " + method.getName());
         return zuper.call();
     }

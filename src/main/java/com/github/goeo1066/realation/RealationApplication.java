@@ -2,8 +2,6 @@ package com.github.goeo1066.realation;
 
 import com.github.goeo1066.realation.core.DatabasePrompt;
 import com.github.goeo1066.realation.core.DatabasePromptFactory;
-import com.github.goeo1066.realation.core.TableInfo;
-import com.github.goeo1066.realation.core.filter.WhereCreator;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,23 +16,28 @@ public class RealationApplication {
     }
 
     @Bean
-    public ApplicationRunner applicationRunner(NamedParameterJdbcTemplate jdbcTemplate) {
+    public DatabasePromptFactory databasePromptFactory(NamedParameterJdbcTemplate jdbcTemplate) {
+        return new DatabasePromptFactory(jdbcTemplate);
+    }
+
+    @Bean
+    public ApplicationRunner applicationRunner(DatabasePromptFactory factory) {
         return args -> {
-            DatabasePromptFactory factory = new DatabasePromptFactory();
-            DatabasePrompt<PersonInfo, Integer> prompt = factory.create(PersonInfo.class, jdbcTemplate);
-            PersonInfo personInfo = prompt.select(1);
-            System.out.println(personInfo.toString());
-//            TableInfo<PersonInfo> tableInfo = TableInfo.retrieveFromEntity(PersonInfo.class);
-//            PersonInfo personInfo1 = WhereCreator.WhereCreatorCondition(tableInfo);
-//            System.out.println(personInfo1.getName());
+            DatabasePrompt<PersonInfo, Integer> prompt = factory.create(PersonInfo.class);
+
+            for (PersonInfo personInfo : prompt.selectBy((column, clause) -> {
+                clause.where().in(column.getName(), "Name B", "Name A")
+                        .and().ne(column.getIdx(), 1)
+                        .and().in(column.getAge(), 70)
+                        .orderBy().desc(column.getIdx()).asc(column.getName());
+            })) {
+                System.out.println(personInfo.toString());
+            }
 
             prompt.selectBy((column, clause) -> {
-                clause.where()
-                        .eq(column.getName(), "goeo").and()
-                        .in(column.getAge(), 10, 20, 30)
-                ;
-
-            });
+                clause.where().eq(column.getName(), "Name C")
+                        .orderBy().desc(column.getIdx());
+            }).forEach(System.out::println);
         };
     }
 }
