@@ -3,7 +3,6 @@ package com.github.goeo1066.realation.core;
 import com.github.goeo1066.realation.core.filter.WhereClauseBuilder;
 import com.github.goeo1066.realation.core.filter.WhereCreator;
 import com.github.goeo1066.realation.select.SelectSpec;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 

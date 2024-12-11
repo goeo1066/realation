@@ -29,7 +29,7 @@ public class DatabasePromptDelegate<S> {
         }
     }
 
-    public List<S> select(NamedParameterJdbcTemplate jdbcTemplate, WhereClauseBuilder builder) throws SQLException {
+    public List<S> select(NamedParameterJdbcTemplate jdbcTemplate, WhereClauseBuilder builder) {
         String selectSql = selectSqlComposer.composeSelectSql(tableInfo, builder);
         JdbcTemplate original = jdbcTemplate.getJdbcTemplate();
 
