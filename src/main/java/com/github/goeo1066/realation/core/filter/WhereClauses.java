@@ -39,6 +39,16 @@ public class WhereClauses {
         return this;
     }
 
+    public WhereClauses isNull(Object ignored) {
+        builder.getStringBuilder().append(builder.getColumnHolder().getOneAndRemove()).append(" IS NULL ");
+        return this;
+    }
+
+    public WhereClauses isNotNull(Object ignored) {
+        builder.getStringBuilder().append(builder.getColumnHolder().getOneAndRemove()).append(" IS NOT NULL ");
+        return this;
+    }
+
     public WhereClauses and() {
         builder.getStringBuilder().append(" AND ");
         return this;

@@ -29,6 +29,7 @@ public class RealationApplication {
                 clause.where().in(column.getName(), "Name B", "Name A")
                         .and().ne(column.getIdx(), 1)
                         .and().in(column.getAge(), 70)
+                        .and().isNotNull(column.getName())
                         .orderBy().desc(column.getIdx()).asc(column.getName());
             })) {
                 System.out.println(personInfo.toString());
